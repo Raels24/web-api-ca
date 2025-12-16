@@ -14,8 +14,13 @@ import UpcomingMoviesPage from "./pages/upcomingMoviesPage";
 import TrendingMoviesPage from "./pages/trendingMoviesPage";
 import TopRatedPage from "./pages/topRatedPage";
 import PopularMoviesPage from "./pages/popularMoviesPage";
-import theme from "./src/theme";
+import theme from "./theme";
 import { ThemeProvider } from "@mui/material/styles";
+import AuthContextProvider from "./contexts/authContext";
+import LoginPage from "./pages/loginPage";
+import SignupPage from "./pages/signupPage";
+
+
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -34,6 +39,7 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>
       <BrowserRouter>
+      <AuthContextProvider>
         <SiteHeader />
         <MoviesContextProvider>
           <Routes>
@@ -47,8 +53,11 @@ const App = () => {
             <Route path="/movies/trending" element={<TrendingMoviesPage />} />
             <Route path="/movies/top-rated" element={<TopRatedPage />} />
             <Route path="/movies/popular" element={<PopularMoviesPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignupPage />} />
           </Routes>
         </MoviesContextProvider>
+        </AuthContextProvider>
       </BrowserRouter>
       </ThemeProvider>
       <ReactQueryDevtools initialIsOpen={false} />

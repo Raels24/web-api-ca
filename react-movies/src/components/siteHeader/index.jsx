@@ -11,26 +11,42 @@ import { useNavigate } from "react-router";
 import { styled } from '@mui/material/styles';
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { useContext } from "react";
+import { AuthContext } from "../../contexts/authContext";
+
 
 const Offset = styled('div')(({ theme }) => theme.mixins.toolbar);
 
 const SiteHeader = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+  const context = useContext(AuthContext);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   
   const navigate = useNavigate();
 
-  const menuOptions = [
-    { label: "Home", path: "/" },
-    { label: "Favorites", path: "/movies/favorites" },
-    { label: "Upcoming", path: "/movies/upcoming" },
-    { label: "Trending", path: "/movies/trending" },
-    { label: "Top Rated", path: "/movies/top-rated" },
-    { label: "Popular", path: "/movies/popular" },
-  ];
+  const menuOptions = context.isAuthenticated ? [
+      { label: "Home", path: "/" },
+      { label: "Favorites", path: "/movies/favorites" },
+      { label: "Upcoming", path: "/movies/upcoming" },
+      { label: "Trending", path: "/movies/trending" },
+      { label: "Top Rated", path: "/movies/top-rated" },
+      { label: "Popular", path: "/movies/popular" },
+      { label: "Logout", action: () => { context.signout(); navigate("/"); } },
+    ]
+  : [
+      { label: "Home", path: "/" },
+      { label: "Upcoming", path: "/movies/upcoming" },
+      { label: "Trending", path: "/movies/trending" },
+      { label: "Top Rated", path: "/movies/top-rated" },
+      { label: "Popular", path: "/movies/popular" },
+      { label: "Login", path: "/login" },
+      { label: "Signup", path: "/signup" },
+    ];
+
+
 
   const handleMenuSelect = (pageURL) => {
     setAnchorEl(null);
@@ -80,7 +96,11 @@ const SiteHeader = () => {
                   {menuOptions.map((opt) => (
                     <MenuItem
                       key={opt.label}
-                      onClick={() => handleMenuSelect(opt.path)}
+                      onClick={() => {
+                        setAnchorEl(null);
+                        if (opt.action) opt.action();
+                        else handleMenuSelect(opt.path);
+                      }}
                     >
                       {opt.label}
                     </MenuItem>
@@ -93,7 +113,10 @@ const SiteHeader = () => {
                   <Button
                     key={opt.label}
                     color="inherit"
-                    onClick={() => handleMenuSelect(opt.path)}
+                    onClick={() => {
+                      if (opt.action) opt.action();
+                      else handleMenuSelect(opt.path);
+                    }}
                     sx={{ fontSize: "1.2rem",
                               marginLeft: "1rem",
                               textTransform: "none",
