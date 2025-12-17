@@ -19,7 +19,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import AuthContextProvider from "./contexts/authContext";
 import LoginPage from "./pages/loginPage";
 import SignupPage from "./pages/signupPage";
-
+import ProtectedRoutes from "./protectedRoutes";
 
 
 const queryClient = new QueryClient({
@@ -43,18 +43,22 @@ const App = () => {
         <SiteHeader />
         <MoviesContextProvider>
           <Routes>
-            <Route path="/movies/favorites" element={<FavoriteMoviesPage />} />
             <Route path="/reviews/:id" element={ <MovieReviewPage /> } />
             <Route path="/movies/:id" element={<MoviePage />} />
             <Route path="/" element={<HomePage />} />
             <Route path="*" element={ <Navigate to="/" /> } />
-            <Route path="/reviews/form" element={ <AddMovieReviewPage /> } />
             <Route path="/movies/upcoming" element={<UpcomingMoviesPage />} />
             <Route path="/movies/trending" element={<TrendingMoviesPage />} />
             <Route path="/movies/top-rated" element={<TopRatedPage />} />
             <Route path="/movies/popular" element={<PopularMoviesPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
+
+            <Route element={<ProtectedRoutes />}>
+            <Route path="/movies/favorites" element={<FavoriteMoviesPage />} />
+            <Route path="/reviews/form" element={<AddMovieReviewPage />} />
+            </Route>
+            
           </Routes>
         </MoviesContextProvider>
         </AuthContextProvider>
