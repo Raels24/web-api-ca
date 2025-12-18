@@ -2,9 +2,9 @@ import dotenv from 'dotenv';
 import express from 'express';
 import './db';
 import cors from 'cors';
-import usersRouter from './api/users';
-import authenticate from './authenticate';
-import moviesRouter from './api/movies';   
+import usersRouter from './api/users/index.js';
+import moviesRouter from './api/movies/index.js';
+import favoritesRouter from './api/favorites/index.js';   
 
 dotenv.config();
 
@@ -16,7 +16,7 @@ app.use(cors());
 app.use(express.json());
 app.use('/api/users', usersRouter);
 app.use('/api/movies', moviesRouter);
-
+app.use('/api/favorites', favoritesRouter);
 
 
 // Error handling middleware - MUST BE AFTER ALL ROUTES
