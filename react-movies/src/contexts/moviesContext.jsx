@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { AuthContext } from "./authContext"; 
+import { getFavorites, addFavorite, removeFavorite } from "../api/favorites-api";
 
 export const MoviesContext = React.createContext(null);
 
@@ -7,16 +9,35 @@ const MoviesContextProvider = (props) => {
     const [favorites, setFavorites] = useState([])
     const [mustWatch, setMustWatch] = useState([]);
 
+    const { authToken, isAuthenticated } = useContext(AuthContext);
 
-  const addToFavorites = (movie) => {
-    let newFavorites = [];
-    if (!favorites.includes(movie.id)){
-      newFavorites = [...favorites, movie.id];
-    }
-    else{
-      newFavorites = [...favorites];
-    }
-    setFavorites(newFavorites)
+    useEffect(() => {
+      const loadFavorites = async () => {
+        try {
+          if (!isAuthenticated) {
+            setFavorites([]);
+            return;
+          }
+          const data = await getFavorites();
+          setFavorites(data.map((f) => f.movieId));
+        } catch (err) {
+          setFavorites([]);
+        }
+      };
+
+      loadFavorites();
+    }, [authToken, isAuthenticated]);
+
+
+  const addToFavorites = async (movie) => {
+   if (favorites.includes(movie.id)) return;
+try {
+    await addFavorite(movie.id);
+    setFavorites( [...favorites, movie.id] );
+    console.log("Favorites:", [...favorites, movie.id]);
+} catch (err) {
+    console.error("Failed to add favorite:", err);
+}
   };
 
   const addToMustWatch = (movie) => {
@@ -36,12 +57,15 @@ const MoviesContextProvider = (props) => {
   };
   //console.log(myReviews);
 
-  
-  // We will use this function in the next step
-  const removeFromFavorites = (movie) => {
-    setFavorites( favorites.filter(
-      (mId) => mId !== movie.id
-    ) )
+  const removeFromFavorites = async (movie) => {
+    try {
+      await removeFavorite(movie.id);
+      setFavorites( favorites.filter(
+        (mId) => mId !== movie.id
+      ) )
+    } catch (err) {
+      console.error("Failed to remove favorite:", err);
+    }
   };
 
    return (
@@ -59,6 +83,7 @@ const MoviesContextProvider = (props) => {
     </MoviesContext.Provider>
   );
 };
+
 
 
 export default MoviesContextProvider;
