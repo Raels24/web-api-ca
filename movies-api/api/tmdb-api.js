@@ -34,4 +34,27 @@ export const getTrendingMovies = async () => {
     return await tmdbFetch(`/trending/movie/week?api_key=${process.env.TMDB_KEY}`);
 };
 
+export const getMovieCredits = async (id) => {
+    return await tmdbFetch(`/movie/${id}/credits?api_key=${process.env.TMDB_KEY}`);
+};
+
+export const getMovieRecommendations = async (id) => {
+    return await tmdbFetch(`/movie/${id}/recommendations?api_key=${process.env.TMDB_KEY}&language=en-US&page=1`);
+};
+
+export const getMovieReviews = async (id) => {
+    return await tmdbFetch(`/movie/${id}/reviews?api_key=${process.env.TMDB_KEY}&language=en-US&page=1`);
+};
+
+export const getGenres = async () => {
+    return await tmdbFetch(`/genre/movie/list?api_key=${process.env.TMDB_KEY}&language=en-US`);
+};
+
+export const getMovieVideos = async (id) => {
+    return await tmdbFetch(`/movie/${id}/videos?api_key=${process.env.TMDB_KEY}&language=en-US`);
+};
+
+export const getMovieImages = async (id) => {
+    return await tmdbFetch(`/movie/${id}/images?api_key=${process.env.TMDB_KEY}`);
+};
 

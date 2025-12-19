@@ -38,9 +38,7 @@ export const getMovie = (args) => {
 
   export const getGenres = () => {
     return fetch(
-      "https://api.themoviedb.org/3/genre/movie/list?api_key=" +
-        import.meta.env.VITE_TMDB_KEY +
-        "&language=en-US"
+      'http://localhost:8080/api/movies/genres'
     ).then( (response) => {
       if (!response.ok) {
         return response.json().then((error) => {
@@ -59,7 +57,7 @@ export const getMovie = (args) => {
     const [, idPart] = queryKey;
     const { id } = idPart;
     return fetch(
-      `https://api.themoviedb.org/3/movie/${id}/images?api_key=${import.meta.env.VITE_TMDB_KEY}`
+      `http://localhost:8080/api/movies/images/${id}`
     ).then( (response) => {
       if (!response.ok) {
         return response.json().then((error) => {
@@ -78,7 +76,7 @@ export const getMovie = (args) => {
     const [, idPart] = queryKey;
     const { id } = idPart;
     return fetch(
-      `https://api.themoviedb.org/3/movie/${id}/reviews?api_key=${import.meta.env.VITE_TMDB_KEY}`
+      `http://localhost:8080/api/movies/reviews/${id}`
     ).then( (response) => {
       if (!response.ok) {
         return response.json().then((error) => {
@@ -158,7 +156,7 @@ export const getPopularMovies = () => {
 export const getMovieCredits = ({ queryKey }) => {
   const [, { id }] = queryKey;
   return fetch(
-    `https://api.themoviedb.org/3/movie/${id}/credits?api_key=${import.meta.env.VITE_TMDB_KEY}`
+    `http://localhost:8080/api/movies/credits/${id}`
   )
     .then((response) => {
       if (!response.ok) {
@@ -174,7 +172,7 @@ export const getMovieCredits = ({ queryKey }) => {
 export const getMovieRecommendations = ({ queryKey }) => {
   const [, { id }] = queryKey;
   return fetch(
-    `https://api.themoviedb.org/3/movie/${id}/recommendations?api_key=${import.meta.env.VITE_TMDB_KEY}&language=en-US&page=1`
+    `http://localhost:8080/api/movies/recommendations/${id}`
   )
     .then((response) => {
       if (!response.ok) {
@@ -189,7 +187,7 @@ export const getMovieRecommendations = ({ queryKey }) => {
 export const getMovieVideos = ({ queryKey }) => {
   const [, { id }] = queryKey;
   return fetch(
-    `https://api.themoviedb.org/3/movie/${id}/videos?api_key=${import.meta.env.VITE_TMDB_KEY}`
+    `http://localhost:8080/api/movies/videos/${id}`
   )
     .then((response) => {
       if (!response.ok) {
