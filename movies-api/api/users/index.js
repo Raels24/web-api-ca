@@ -36,9 +36,15 @@ async function registerUser(req, res) {
         return res.status(400).json({ success: false, msg: 'Password must be miniumum 8 characters long and include at least one letter, one number, and one special character.' });
     }
 
-
+    try {
     await User.create(req.body);
     res.status(201).json({ success: true, msg: 'User successfully created.' });
+    } catch (error) {
+        if (error.code === 11000) {
+            return res.status(409).json({ success: false, msg: 'Username already exists.' });
+        }
+        throw error;
+    }
 }
 
 async function authenticateUser(req, res) {
